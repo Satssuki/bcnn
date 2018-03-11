@@ -137,9 +137,9 @@ include_directories (
 add_subdirectory(bip) 
 
 if (USE_CUDA)
-file(GLOB SRC_LIB src/*.c src/*.cu)
+file(GLOB SRC_LIB src/*.c src/*.cu src/layers/*.c src/layers/*.cu)
 else()
-file(GLOB SRC_LIB src/*.c)
+file(GLOB SRC_LIB src/*.c src/layers/*.c)
 endif()
 list(REMOVE_ITEM SRC_LIB ${CMAKE_CURRENT_SOURCE_DIR}/src/bcnn_cl.c)
 file(GLOB SRC_CLI src/bcnn_cl.c)
