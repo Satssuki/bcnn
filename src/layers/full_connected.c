@@ -149,14 +149,25 @@ void bcnn_full_connected_initialize(bcnn_layer_base *layer,
 
 #ifdef BCNN_USE_CUDA
     if (net->learner.optimizer == ADAM) {
-        int weights_size = bcnn_tensor_get_size(&layer->weights);
-        layer->adam_m_gpu = bcnn_cuda_memcpy_f32(layer->adam_m, weights_size);
-        layer->adam_v_gpu = bcnn_cuda_memcpy_f32(layer->adam_v, weights_size);
+        int weights_size = bcnn_tensor_get_size(&param->weights);
+        param->adam_m_gpu = bcnn_cuda_memcpy_f32(param->adam_m, weights_size);
+        param->adam_v_gpu = bcnn_cuda_memcpy_f32(param->adam_v, weights_size);
     }
 #endif
 }
 
-void bcnn_full_connected_terminate(bcnn_layer_base *layer) {}
+void bcnn_full_connected_terminate(bcnn_layer_base *layer) {
+    full_connected_param *layer_param = (full_connected_param *)layer->param;
+    bcnn_tensor_destroy(&layer_param->weights);
+    bcnn_tensor_destroy(&layer_param->biases);
+    bh_free(layer_param->adam_m);
+    bh_free(layer_param->adam_v);
+#ifdef BCNN_USE_CUDA
+    if (layer_param->adam_m_gpu) bcnn_cuda_free(layer_param->adam_m_gpu);
+    if (layer_param->adam_v_gpu) bcnn_cuda_free(layer_param->adam_v_gpu);
+#endif
+    bh_free(layer->param);
+}
 
 void bcnn_full_connected_update(bcnn_layer_base *layer, bcnn_net *net) {}
 

@@ -20,8 +20,8 @@
 * SOFTWARE.
 */
 
-#ifndef BH_LAYER_H
-#define BH_LAYER_H
+#ifndef BCNN_LAYER_H
+#define BCNN_LAYER_H
 
 #include "bcnn/bcnn.h"
 
@@ -36,7 +36,6 @@ typedef struct bcnn_layer_param {
     int pad;
     int quantize;
     int net_state;
-    bcnn_layer_type type;
     bcnn_activation activation;
     bcnn_loss loss;
     bcnn_loss_metric loss_metric;
@@ -55,7 +54,6 @@ typedef struct bcnn_layer_base {
 } bcnn_layer_base;
 
 typedef struct bcnn_layer_instance {
-    bcnn_layer_type type;
     int param_size;
     void (*initialize)(bcnn_layer_base* layer, bcnn_layer_param* param,
                        bcnn_net* net);
@@ -89,4 +87,4 @@ void bcnn_layer_free(bcnn_layer_base* layer);
 }
 #endif
 
-#endif  // BH_LAYER_H
+#endif  // BCNN_LAYER_H
