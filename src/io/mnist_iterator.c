@@ -22,7 +22,7 @@
 
 #include "mnist_iterator.h"
 
-#include "bh_log.h"
+#include "bcnn_utils.h"
 
 bcnn_iterator_type mnist_iterator = {
     .param_size = sizeof(mnist_param),
@@ -51,13 +51,13 @@ void bcnn_iterator_mnist_initialize(bcnn_iterator *iterator,
     if (f_img == NULL) {
         fprintf(stderr, "[ERROR] Cound not open file %s\n",
                 input_param->data_path);
-        return -1;
+        return;
     }
     f_label = fopen(input_param->label_path, "rb");
     if (f_label == NULL) {
         fprintf(stderr, "[ERROR] Cound not open file %s\n",
                 input_param->label_path);
-        return -1;
+        return;
     }
 
     iter_param->f_input = f_img;
@@ -123,13 +123,9 @@ void bcnn_iterator_mnist_next(bcnn_iterator *iterator) {
 }
 
 void bcnn_iterator_mnist_terminate(bcnn_iterator *iterator) {
-    mnist_param *iter_param = (mnist_param *)iter_param->param;
-    if (iter_param->f_input != NULL) {
-        fclose(iter_param->f_input);
-    }
-    if (iter_param->f_label != NULL) {
-        fclose(iter_param->f_label);
-    }
+    mnist_param *iter_param = (mnist_param *)iterator->param;
+    bh_fclose(iter_param->f_input);
+    bh_fclose(iter_param->f_label);
     bh_free(iter->input_uchar);
     bh_free(iter->label_int);
 }

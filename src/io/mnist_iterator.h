@@ -45,10 +45,10 @@ typedef struct mnist_param {
     int *label_int;
 } mnist_param;
 
-void bcnn_iterator_mnist_initialize(bcnn_iterator *layer,
+void bcnn_iterator_mnist_initialize(bcnn_iterator *iterator,
                                     bcnn_iterator_param *param);
-void bcnn_iterator_mnist_next(bcnn_iterator *layer);
-void bcnn_iterator_mnist_terminate(bcnn_iterator *layer);
+void bcnn_iterator_mnist_next(bcnn_iterator *iterator);
+void bcnn_iterator_mnist_terminate(bcnn_iterator *iterator);
 
 #ifdef __cplusplus
 }

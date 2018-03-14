@@ -23,6 +23,10 @@
 #ifndef BH_UTILS_H
 #define BH_UTILS_H
 
+#include <stdio.h>
+
+#include "bh_log.h"
+
 /* Cuda include */
 #ifdef BCNN_USE_CUDA
 #include <cublas_v2.h>
@@ -52,6 +56,19 @@ static bh_inline void bh_strfill(char **option, char *argv) {
     length = strlen(argv) + 1;
     *option = (char *)calloc(length, sizeof(char));
     memcpy(*option, argv, length);
+}
+
+static inline FILE *bh_fopen(const char *filename, const char *mode) {
+    FILE *f = NULL;
+    f = fopen(filename, mode);
+    bh_check(f != NULL, "Could not open %s", filename);
+    return f;
+}
+
+static inline void bh_fclose(FILE *f) {
+    if (f != NULL) {
+        fclose(f);
+    }
 }
 
 #ifdef BCNN_USE_CUDA

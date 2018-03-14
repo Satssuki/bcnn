@@ -20,45 +20,37 @@
 * SOFTWARE.
 */
 
-#ifndef BCNN_ITERATOR_H
-#define BCNN_ITERATOR_H
+#ifndef BCNN_CIFAR10_ITERATOR_H
+#define BCNN_CIFAR10_ITERATOR_H
 
+#include "base_iterator.h"
 #include "bcnn/bcnn.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* Common virtual interface for iterator */
+bcnn_iterator_type cifar10_iterator;
 
-typedef struct {
-    const char* data_path;
-    const char* label_path;
-} bcnn_iterator_param;
+typedef struct cifar10_param {
+    FILE *f_input;
+    FILE *f_label;
+    int n_iter;
+    int input_width;
+    int input_height;
+    int input_depth;
+    unsigned char *input_uchar;
+    int label_width;
+    int *label_int;
+} cifar10_param;
 
-typedef struct bcnn_iterator {
-    void* param;
-    struct bcnn_iterator_type* type;
-} bcnn_iterator;
-
-typedef struct bcnn_iterator_type {
-    int param_size;
-    void (*initialize)(bcnn_iterator* iterator, bcnn_iterator_param* param);
-    void (*next)(bcnn_iterator* iterator);
-    void (*terminate)(bcnn_iterator* iterator);
-} bcnn_iterator_type;
-
-bcnn_iterator* bcnn_iterator_new(bcnn_iterator_type* type,
-                                 bcnn_iterator_param* param);
-void bcnn_iterator_delete(bcnn_iterator* iterator);
-
-void bcnn_iterator_initialize(bcnn_iterator* iterator,
-                              bcnn_iterator_param* param);
-void bcnn_iterator_next(bcnn_iterator* iterator);
-void bcnn_iterator_terminate(bcnn_iterator* iterator);
+void bcnn_iterator_cifar10_initialize(bcnn_iterator *layer,
+                                      bcnn_iterator_param *param);
+void bcnn_iterator_cifar10_next(bcnn_iterator *layer);
+void bcnn_iterator_cifar10_terminate(bcnn_iterator *layer);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // BCNN_ITERATOR_H
+#endif  // BCNN_CIFAR10_ITERATOR_H
