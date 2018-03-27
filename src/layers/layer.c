@@ -1,13 +1,18 @@
 #include "layer.h"
 
-// bcnn_layer_create implentation
-bcnn_layer_base* bcnn_layer_create(bcnn_layer_instance* layer_type,
-                                   bcnn_layer_param* param, bcnn_net* net) {
+
+bcnn_layer_base* bcnn_layer_new(bcnn_layer_instance* layer_type,
+                                bcnn_layer_param* param, bcnn_net* net) {
     bcnn_layer_base* layer =
         (bcnn_layer_base*)calloc(1, sizeof(bcnn_layer_base));
     layer->type = layer_type;
     bcnn_layer_initialize(layer, param, net);
     return layer;
+}
+
+void bcnn_layer_delete(bcnn_layer_base* layer) {
+    layer->type->terminate(layer);
+    bh_free(layer);
 }
 
 void bcnn_layer_initialize(bcnn_layer_base* layer, bcnn_layer_param* param,
@@ -33,9 +38,4 @@ void bcnn_layer_forward(bcnn_layer_base* layer, bcnn_net* net,
 void bcnn_layer_backward(bcnn_layer_base* layer, bcnn_net* net,
                          bcnn_connection* conn) {
     layer->type->backward(layer, net, conn);
-}
-
-void bcnn_layer_free(bcnn_layer_base* layer) {
-    layer->type->terminate(layer);
-    bh_free(layer);
 }

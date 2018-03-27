@@ -65,8 +65,12 @@ typedef struct bcnn_layer_instance {
     void (*update)(bcnn_layer_base* layer, bcnn_net* net);
 } bcnn_layer_instance;
 
-bcnn_layer_base* bcnn_layer_create(bcnn_layer_instance* type,
-                                   bcnn_layer_param* param, bcnn_net* net);
+/* Generic constructor */
+bcnn_layer_base* bcnn_layer_new(bcnn_layer_instance* type,
+                                bcnn_layer_param* param, bcnn_net* net);
+
+/* Generic destructor */
+void bcnn_layer_delete(bcnn_layer_base* layer);
 
 void bcnn_layer_initialize(bcnn_layer_base* layer, bcnn_layer_param* param,
                            bcnn_net* net);
@@ -80,8 +84,6 @@ void bcnn_layer_forward(bcnn_layer_base* layer, bcnn_net* net,
 
 void bcnn_layer_backward(bcnn_layer_base* layer, bcnn_net* net,
                          bcnn_connection* conn);
-
-void bcnn_layer_free(bcnn_layer_base* layer);
 
 #ifdef __cplusplus
 }
