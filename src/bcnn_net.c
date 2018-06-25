@@ -1,24 +1,24 @@
 /*
-* Copyright (c) 2016 Jean-Noel Braun.
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
-*
-* The above copyright notice and this permission notice shall be included in
-* all copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-* SOFTWARE.
-*/
+ * Copyright (c) 2016 Jean-Noel Braun.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
 /* include bh helpers */
 #include <bh/bh.h>
@@ -347,24 +347,6 @@ int bcnn_forward(bcnn_net *net) {
     bcnn_node node = {0};
     for (i = 0; i < net->num_nodes; ++i) {
         node = net->nodes[i];
-        fprintf(stderr, "type layer %d / %d %d\n", i, net->num_nodes,
-                node.layer->type);
-        /*if (i == 1) {
-            FILE *flog = fopen("yolo_in_layer_1.txt", "wt");
-            bcnn_tensor *t = &net->tensors[node.src[0]];
-#ifdef BCNN_USE_CUDA
-            bcnn_cuda_memcpy_dev2host(t->data_gpu, t->data,
-                                      bcnn_tensor_get_size(t));
-            for (i = 0; i < t->w * t->h * t->c; ++i) {
-                fprintf(flog, "%d %f\n", i, t->data[i]);
-            }
-#else
-            for (i = 0; i < t->w * t->h * t->c; ++i) {
-                fprintf(flog, "%d %f\n", i, t->data[i]);
-            }
-#endif
-            fclose(flog);
-        }*/
         for (j = 0; j < node.num_dst; ++j) {
             output_size = bcnn_tensor_get_size(&net->tensors[node.dst[j]]);
 #ifdef BCNN_USE_CUDA
@@ -913,8 +895,9 @@ int bcnn_visualize_network(bcnn_net *net) {
                      ++k) {
                     sprintf(name, "sample%d_layer%d_fmap%d.png", i, j, k);
                     bip_write_float_image_norm(
-                        name, net->tensors[net->nodes[j].dst[0]].data + i * sz +
-                                  k * w * h,
+                        name,
+                        net->tensors[net->nodes[j].dst[0]].data + i * sz +
+                            k * w * h,
                         w, h, 1, w * sizeof(float));
                 }
             }
