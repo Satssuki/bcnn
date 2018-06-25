@@ -467,8 +467,8 @@ static void correct_region_boxes(yolo_detection *dets, int n, int w, int h,
         new_h = neth;
         new_w = (w * neth) / h;
     }
-    fprintf(stderr, "netw %d neth %d new_w %d new_h %d\n", netw, neth, new_w,
-            new_h);
+    // fprintf(stderr, "netw %d neth %d new_w %d new_h %d\n", netw, neth, new_w,
+    //        new_h);
     for (i = 0; i < n; ++i) {
         yolo_box b = dets[i].bbox;
         b.x = (b.x - (netw - new_w) / 2. / netw) / ((float)new_w / netw);
@@ -495,11 +495,6 @@ void bcnn_yolo_get_detections(bcnn_net *net, bcnn_node *node, int w, int h,
     bcnn_layer *layer = node->layer;
     bcnn_tensor *dst = &net->tensors[node->dst[0]];
     float *predictions = dst->data;
-    FILE *flog = fopen("lolo.txt", "wt");
-    for (i = 0; i < dst->w * dst->h * dst->c; ++i) {
-        fprintf(flog, "%d %f\n", i, dst->data[i]);
-    }
-    fclose(flog);
     float max_objectness = 0.0f;
     for (i = 0; i < dst->w * dst->h; ++i) {
         int row = i / dst->w;
@@ -544,7 +539,7 @@ void bcnn_yolo_get_detections(bcnn_net *net, bcnn_node *node, int w, int h,
             }
         }
     }
-    fprintf(stderr, "max_objectness %f\n", max_objectness);
+    // fprintf(stderr, "max_objectness %f\n", max_objectness);
     correct_region_boxes(dets, dst->w * dst->h * layer->num, w, h, netw, neth,
                          relative);
 }
