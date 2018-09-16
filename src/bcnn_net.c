@@ -1047,7 +1047,7 @@ bcnn_status bcnn_load_model_legacy(bcnn_net *net, char *filename) {
 
     return BCNN_SUCCESS;
 }
-
+#if 0
 int bcnn_visualize_network(bcnn_net *net) {
     int i, j, k, sz, w, h, c;
     bcnn_layer *layer = NULL;
@@ -1113,7 +1113,7 @@ int bcnn_visualize_network(bcnn_net *net) {
                 ftmp = fopen(name, "wt");
                 layer = net->nodes[j].layer;
                 for (k = 0; k < sz; ++k) {
-                    fprintf(ftmp, "%f ", layer->weights.data[k]);
+                    fprintf(ftmp, "%f ", net->tensors[net->nodes[j].src[1]].data[k]);
                 }
                 fprintf(ftmp, "\n");
                 fclose(ftmp);
@@ -1136,6 +1136,7 @@ int bcnn_visualize_network(bcnn_net *net) {
 
     return BCNN_SUCCESS;
 }
+#endif
 
 int bcnn_free_layer(bcnn_layer **layer) {
     bcnn_layer *p_layer = (*layer);
