@@ -30,7 +30,7 @@ extern "C" {
 #endif
 
 int bcnn_forward_eltwise_layer(bcnn_net *net, bcnn_node *node);
-int bcnn_forward_eltwise_layer(bcnn_net *net, bcnn_node *node);
+int bcnn_backward_eltwise_layer(bcnn_net *net, bcnn_node *node);
 
 #ifdef __cplusplus
 }

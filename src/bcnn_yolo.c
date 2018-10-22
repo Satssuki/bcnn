@@ -60,7 +60,7 @@ bcnn_status bcnn_add_yolo_layer(bcnn_net *net, int n, int classes, int coords,
     if (anchors != NULL) {
         memcpy(node.layer->biases.data, anchors, total * 2 * sizeof(float));
     }
-    node.layer->max_boxes = 90;
+    node.layer->max_boxes = BCNN_DETECTION_MAX_BOXES;
     node.layer->truths = node.layer->max_boxes * (coords + 1);
 
     // Add connection to net
@@ -203,7 +203,7 @@ void bcnn_forward_yolo_layer_cpu(bcnn_net *net, bcnn_layer *layer,
 
     memset(dst_tensor->grad_data, 0,
            bcnn_tensor_size(dst_tensor) * sizeof(float));
-    if (!layer->net_state) {  // state != train
+    if (/*!layer->net_state*/ net->task == PREDICT) {  // state != train
         return;
     }
     // This part is for training

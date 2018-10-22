@@ -113,9 +113,9 @@ int bcnn_forward_eltwise_layer_gpu(bcnn_layer *layer, bcnn_tensor *src0_tensor,
                                    bcnn_tensor *src1_tensor,
                                    bcnn_tensor *dst_tensor) {
     int sz = bcnn_tensor_size(dst_tensor);
-    bcnn_cuda_copy_f32(sz, src0_tensor->data, 1, dst_tensor->data, 1);
-    bcnn_cuda_axpy(sz, 1.0f, src1_tensor->data, 1, dst_tensor->data, 1);
-    bcnn_forward_activation_gpu(dst_tensor->data, sz, layer->activation);
+    bcnn_cuda_copy_f32(sz, src0_tensor->data_gpu, 1, dst_tensor->data_gpu, 1);
+    bcnn_cuda_axpy(sz, 1.0f, src1_tensor->data_gpu, 1, dst_tensor->data_gpu, 1);
+    bcnn_forward_activation_gpu(dst_tensor->data_gpu, sz, layer->activation);
     return BCNN_SUCCESS;
 }
 
@@ -123,12 +123,12 @@ int bcnn_backward_eltwise_layer_gpu(bcnn_layer *layer, bcnn_tensor *src0_tensor,
                                     bcnn_tensor *src1_tensor,
                                     bcnn_tensor *dst_tensor) {
     int sz = bcnn_tensor_size(dst_tensor);
-    bcnn_backward_activation_gpu(dst_tensor->data, dst_tensor->grad_data, sz,
-                                 layer->activation);
-    bcnn_cuda_axpy(sz, 1.0f, dst_tensor->grad_data, 1, src0_tensor->grad_data,
-                   1);
-    bcnn_cuda_axpy(sz, 1.0f, dst_tensor->grad_data, 1, src1_tensor->grad_data,
-                   1);
+    bcnn_backward_activation_gpu(
+        dst_tensor->data_gpu, dst_tensor->grad_data_gpu, sz, layer->activation);
+    bcnn_cuda_axpy(sz, 1.0f, dst_tensor->grad_data_gpu, 1,
+                   src0_tensor->grad_data_gpu, 1);
+    bcnn_cuda_axpy(sz, 1.0f, dst_tensor->grad_data_gpu, 1,
+                   src1_tensor->grad_data_gpu, 1);
     return BCNN_SUCCESS;
 }
 #endif

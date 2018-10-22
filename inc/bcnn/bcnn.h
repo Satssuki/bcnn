@@ -143,7 +143,8 @@ typedef enum {
     CLASSIFICATION,
     REGRESSION,
     HEATMAP_REGRESSION,
-    SEGMENTATION
+    SEGMENTATION,
+    DETECTION
 } bcnn_target;
 
 typedef enum {
@@ -209,6 +210,7 @@ typedef struct {
     float distortion;     /**< Current distortion factor. */
     float distortion_kx;  /**< Current distortion x kernel. */
     float distortion_ky;  /**< Current distortion y kernel. */
+    int flipped; /**< Current flip state (0: original, 1: horizontal flip) */
     float mean_r;
     float mean_g;
     float mean_b;
@@ -624,9 +626,12 @@ bcnn_status bcnn_add_cost_layer(bcnn_net *net, bcnn_loss loss,
                                 char *src_id, char *label_id, char *dst_id);
 
 /* YOLO */
-typedef struct {
-    float x, y, w, h;
-} yolo_box;
+#define BCNN_DETECTION_MAX_BOXES 50
+
+/* TODO: move to private header */
+bcnn_status bcnn_data_iter_detection(bcnn_net *net, bcnn_iterator *iter);
+
+typedef struct { float x, y, w, h; } yolo_box;
 
 typedef struct yolo_detection {
     yolo_box bbox;
